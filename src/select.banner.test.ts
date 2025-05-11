@@ -1,0 +1,273 @@
+import { describe, it, expect, vi, afterEach } from 'vitest'
+import { render } from '@inquirer/testing'
+// import { ValidationError } from '@inquirer/core'
+import select from './select.ts'
+import { Separator } from '@inquirer/core'
+import { magenta } from 'yoctocolors'
+
+const numberedChoices = [
+    { value: 1 },
+    { value: 2 },
+    { value: 3 },
+    { value: 4 },
+    { value: 5 },
+    { value: 6 },
+    { value: 7 },
+    { value: 8 },
+    { value: 9 },
+    { value: 10 },
+    { value: 11 },
+    { value: 12 },
+] as const
+
+// const complexStringChoices = [
+//     { name: '1 a', value: '1 a' },
+//     { name: '1 b', value: '1 b' },
+//     { name: '2', value: '2' },
+//     { name: '3', value: '3' },
+//     { name: '4 a', value: '4 a' },
+//     { name: '4 b', value: '4 b' },
+//     { name: '4 c', value: '4 c' },
+//     { name: '5', value: '5' },
+//     { name: '6', value: '6' },
+//     { name: '7.1', value: '7.1' },
+//     { name: '7.2', value: '7.2' },
+//     { name: '8', value: '8' },
+// ] as const
+
+afterEach(() => {
+    vi.useRealTimers()
+})
+
+const printExampleBanner = ({
+    first,
+    second,
+    third,
+}: { first?: string; second?: string; third?: string } = {}) => `${magenta('Stateful banner')}
+  First timer:      ${first ? '✅' : '⚠️'} ${first ?? ''}
+  Second timer:     ${second ? '✅' : '⚠️'} ${second ?? ''}
+  Third timer:      ${third ? '✅' : '⚠️'} ${third ?? ''}
+`
+
+type Names = 'first' | 'second' | 'third'
+
+const statefulBanner = (setState: (s: string) => void) => {
+    // Print the initial banner, e.g. as a placeholder
+    setState(printExampleBanner())
+
+    const timestamps: Record<Names, string> = { first: '', second: '', third: '' }
+    const timers: Record<Names, NodeJS.Timeout | undefined> = { first: undefined, second: undefined, third: undefined }
+
+    const randomTimeout = (x: keyof typeof timers) =>
+        new Promise((resolve) => {
+            timers[x] = setTimeout(resolve, Math.floor(Math.random() * 4000) + 1000)
+        }).then(() => {
+            timestamps[x] = new Date().toISOString()
+            setState(printExampleBanner(timestamps))
+        })
+
+    // Run the random timeouts in parallel
+    Promise.all([randomTimeout('first'), randomTimeout('second'), randomTimeout('third')])
+
+    // Cleanup the timers
+    return () => Object.values(timers).forEach(clearTimeout)
+}
+
+describe('select prompt with stateful banner', () => {
+    describe('the first-party functionality of the prompt is not affected by the stateful banner', () => {
+        it('use arrow keys to select an option', async () => {
+            const { answer, events, getScreen } = await render(select, {
+                message: 'Select a number',
+                choices: numberedChoices,
+                statefulBanner,
+            })
+
+            expect(getScreen()).toMatchInlineSnapshot(`
+      "Stateful banner
+  First timer:      ⚠️
+  Second timer:     ⚠️
+  Third timer:      ⚠️
+
+? Select a number
+❯ 1
+  2
+  3
+  4
+  5
+  6
+  7"
+    `)
+
+            events.keypress('down')
+            events.keypress('down')
+            expect(getScreen()).toMatchInlineSnapshot(`
+          "Stateful banner
+  First timer:      ⚠️
+  Second timer:     ⚠️
+  Third timer:      ⚠️
+
+? Select a number
+  1
+  2
+❯ 3
+  4
+  5
+  6
+  7"
+        `)
+
+            events.keypress('enter')
+            expect(getScreen()).toMatchInlineSnapshot(`
+          "Stateful banner
+  First timer:      ⚠️
+  Second timer:     ⚠️
+  Third timer:      ⚠️
+
+✔ Select a number 3"
+`)
+
+            await expect(answer).resolves.toEqual(3)
+        })
+
+        it('allow selecting the first option', async () => {
+            const { answer, events, getScreen } = await render(select, {
+                message: 'Select a number',
+                choices: numberedChoices.slice(0, 3),
+                statefulBanner,
+            })
+
+            expect(getScreen()).toMatchInlineSnapshot(`
+"Stateful banner
+  First timer:      ⚠️
+  Second timer:     ⚠️
+  Third timer:      ⚠️
+
+? Select a number
+❯ 1
+  2
+  3"
+  `)
+
+            events.keypress('enter')
+            await expect(answer).resolves.toEqual(1)
+
+            expect(getScreen()).toMatchInlineSnapshot(`
+  "Stateful banner
+  First timer:      ⚠️
+  Second timer:     ⚠️
+  Third timer:      ⚠️
+
+✔ Select a number 1"`)
+        })
+
+        it('cycles through options', async () => {
+            const { answer, events, getScreen } = await render(select, {
+                message: 'Select a number',
+                choices: numberedChoices,
+                pageSize: 2,
+                statefulBanner,
+            })
+
+            expect(getScreen()).toMatchInlineSnapshot(`
+"Stateful banner
+  First timer:      ⚠️
+  Second timer:     ⚠️
+  Third timer:      ⚠️
+
+? Select a number
+❯ 1
+  2"
+    `)
+
+            events.keypress('up')
+            events.keypress('up')
+            expect(getScreen()).toMatchInlineSnapshot(`
+"Stateful banner
+  First timer:      ⚠️
+  Second timer:     ⚠️
+  Third timer:      ⚠️
+
+? Select a number
+❯ 11
+  12"
+    `)
+
+            events.keypress('enter')
+            await expect(answer).resolves.toEqual(11)
+        })
+
+        it('does not scroll up beyond first item when not looping', async () => {
+            const { answer, events, getScreen } = await render(select, {
+                message: 'Select a number',
+                choices: numberedChoices,
+                pageSize: 2,
+                loop: false,
+                statefulBanner,
+            })
+
+            expect(getScreen()).toMatchInlineSnapshot(`
+"Stateful banner
+  First timer:      ⚠️
+  Second timer:     ⚠️
+  Third timer:      ⚠️
+
+? Select a number
+❯ 1
+  2"
+`)
+
+            events.keypress('up')
+            events.keypress('up')
+            expect(getScreen()).toMatchInlineSnapshot(`
+"Stateful banner
+  First timer:      ⚠️
+  Second timer:     ⚠️
+  Third timer:      ⚠️
+
+? Select a number
+❯ 1
+  2"
+`)
+
+            events.keypress('enter')
+            await expect(answer).resolves.toEqual(1)
+        })
+
+        it('does not scroll up beyond first selectable item when not looping', async () => {
+            const { answer, events, getScreen } = await render(select, {
+                message: 'Select a number',
+                choices: [new Separator(), ...numberedChoices],
+                pageSize: 2,
+                loop: false,
+                statefulBanner,
+            })
+
+            expect(getScreen()).toMatchInlineSnapshot(`
+"Stateful banner
+  First timer:      ⚠️
+  Second timer:     ⚠️
+  Third timer:      ⚠️
+
+? Select a number
+ ──────────────
+❯ 1"
+`)
+
+            events.keypress('up')
+            events.keypress('up')
+            expect(getScreen()).toMatchInlineSnapshot(`
+"Stateful banner
+  First timer:      ⚠️
+  Second timer:     ⚠️
+  Third timer:      ⚠️
+
+? Select a number
+ ──────────────
+❯ 1"
+`)
+
+            events.keypress('enter')
+            await expect(answer).resolves.toEqual(1)
+        })
+    })
+})
