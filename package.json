@@ -1,6 +1,6 @@
 {
     "name": "inquirer-select-with-state",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Inquirer select prompt with a stateful banner",
     "main": "./dist/select.js",
     "files": [
