@@ -1,6 +1,6 @@
 import { Separator } from '@inquirer/core'
 import { magenta } from 'yoctocolors'
-import select from '.'
+import select from './index.js'
 
 const printExampleBanner = ({
     first,
@@ -63,3 +63,5 @@ export async function example(): Promise<void> {
 
     console.log(`You chose ${answer}`)
 }
+
+example()
