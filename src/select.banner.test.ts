@@ -1,6 +1,7 @@
 import { Separator } from '@inquirer/core'
 import { render } from '@inquirer/testing'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { magenta } from 'yoctocolors'
 import select from './select.ts'
 
 const numberedChoices = [
@@ -26,7 +27,7 @@ const printExampleBanner = ({
     first,
     second,
     third,
-}: { first?: string; second?: string; third?: string } = {}) => `Stateful banner
+}: { first?: string; second?: string; third?: string } = {}) => `${magenta('Stateful banner')}
   First timer:      ${first ? '✅' : '⚠️'} ${first ? 'finished' : 'pending...'}
   Second timer:     ${second ? '✅' : '⚠️'} ${second ? 'finished' : 'pending...'}
   Third timer:      ${third ? '✅' : '⚠️'} ${third ? 'finished' : 'pending...'}
