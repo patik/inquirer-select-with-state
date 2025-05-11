@@ -62,3 +62,7 @@ Directory size: 123M
 ### Return value
 
 If your banner has any side effects (e.g. timeouts), you can return a cleanup function which will be called when the prompt quits.
+
+### Example
+
+See `src/example.ts` for a full example using `async`/`await`.
