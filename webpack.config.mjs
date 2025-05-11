@@ -1,12 +1,16 @@
-/* eslint-disable */
-const path = require('path')
-const webpack = require('webpack')
-module.exports = {
-    entry: './src/main.ts',
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import webpack from 'webpack'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+export default {
+    entry: './src/select.ts',
     mode: 'production',
     watch: false,
     output: {
-        filename: 'bin.js',
+        filename: 'select.js',
         path: path.resolve(__dirname, 'dist'),
     },
     resolve: {
