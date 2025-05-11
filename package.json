@@ -2,7 +2,7 @@
     "name": "inquirer-select-with-state",
     "version": "0.0.1",
     "description": "Inquirer select prompt with a stateful banner",
-    "main": "./dist/index.ts",
+    "main": "./dist/select.ts",
     "type": "module",
     "scripts": {
         "start": "tsx ./src/example.ts",

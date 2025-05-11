@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { render } from '@inquirer/testing'
 import { ValidationError } from '@inquirer/core'
-import select from './index.ts'
+import select from './select.ts'
 import { Separator } from '@inquirer/core'
 
 const numberedChoices = [

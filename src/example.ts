@@ -1,6 +1,6 @@
 import { Separator } from '@inquirer/core'
 import { magenta } from 'yoctocolors'
-import select from './index.js'
+import select from './select.js'
 
 const printExampleBanner = ({
     first,
