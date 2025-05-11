@@ -1,7 +1,6 @@
+import { Separator } from '@inquirer/core'
 import { render } from '@inquirer/testing'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-// import { ValidationError } from '@inquirer/core'
-import { Separator } from '@inquirer/core'
 import { magenta } from 'yoctocolors'
 import select from './select.ts'
 
@@ -19,21 +18,6 @@ const numberedChoices = [
     { value: 11 },
     { value: 12 },
 ] as const
-
-// const complexStringChoices = [
-//     { name: '1 a', value: '1 a' },
-//     { name: '1 b', value: '1 b' },
-//     { name: '2', value: '2' },
-//     { name: '3', value: '3' },
-//     { name: '4 a', value: '4 a' },
-//     { name: '4 b', value: '4 b' },
-//     { name: '4 c', value: '4 c' },
-//     { name: '5', value: '5' },
-//     { name: '6', value: '6' },
-//     { name: '7.1', value: '7.1' },
-//     { name: '7.2', value: '7.2' },
-//     { name: '8', value: '8' },
-// ] as const
 
 afterEach(() => {
     vi.useRealTimers()
@@ -94,7 +78,7 @@ describe('select prompt with stateful banner', () => {
   3"
             `)
 
-            // wait 3 seconds, and the first timer will finish
+            // wait a couple seconds, and one of the timer will finish
             await new Promise((resolve) => setTimeout(resolve, 2500))
 
             expect(getScreen()).toMatchInlineSnapshot(`
@@ -145,7 +129,7 @@ describe('select prompt with stateful banner', () => {
         it('use arrow keys to select an option', async () => {
             const { answer, events, getScreen } = await render(select, {
                 message: 'Select a number',
-                choices: numberedChoices,
+                choices: numberedChoices.slice(0, 4),
                 statefulBanner,
             })
 
@@ -159,10 +143,7 @@ describe('select prompt with stateful banner', () => {
 ❯ 1
   2
   3
-  4
-  5
-  6
-  7"
+  4"
     `)
 
             events.keypress('down')
@@ -177,10 +158,7 @@ describe('select prompt with stateful banner', () => {
   1
   2
 ❯ 3
-  4
-  5
-  6
-  7"
+  4"
         `)
 
             events.keypress('enter')
