@@ -1,6 +1,6 @@
 {
     "name": "inquirer-select-with-state",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "description": "Inquirer select prompt with a stateful banner",
     "main": "./dist/select.js",
     "files": [
@@ -17,7 +17,8 @@
         "check-format": "prettier --check .",
         "lint": "eslint . --fix && tsc --noEmit",
         "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
-        "ci": "pnpm build && pnpm check-format && pnpm check-exports"
+        "ci": "pnpm build && pnpm check-format && pnpm check-exports",
+        "prepublishOnly": "pnpm run ci"
     },
     "keywords": [
         "inquirer",
