@@ -1,0 +1,3 @@
+.nvmrc
+src/**/*.test.ts
+src/example.ts
