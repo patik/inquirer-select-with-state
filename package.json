@@ -18,7 +18,8 @@
         "lint": "eslint . --fix && tsc --noEmit",
         "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
         "ci": "pnpm build && pnpm check-format && pnpm check-exports",
-        "prepublishOnly": "pnpm run ci"
+        "prepublishOnly": "pnpm run ci",
+        "prepare": "husky"
     },
     "keywords": [
         "inquirer",
@@ -58,6 +59,7 @@
         "eslint": "^9.27.0",
         "eslint-config-prettier": "^10.1.5",
         "eslint-plugin-prettier": "^5.4.0",
+        "husky": "^9.1.7",
         "prettier": "3.5.3",
         "ts-loader": "^9.5.2",
         "tsx": "^4.19.4",
