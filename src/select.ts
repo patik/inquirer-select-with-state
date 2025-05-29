@@ -120,7 +120,7 @@ function normalizeChoices<Value>(
     })
 }
 
-export default createPrompt(<Value>(config: SelectConfig<Value>, done: (value: Value) => void) => {
+export default createPrompt(<Value = string>(config: SelectConfig<Value>, done: (value: Value) => void) => {
     const { loop = true, pageSize = 7, statefulBanner } = config
     const firstRender = useRef(true)
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme)
