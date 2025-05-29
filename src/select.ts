@@ -49,7 +49,7 @@ const selectTheme: SelectTheme = {
     indexMode: 'hidden',
 }
 
-type Choice<Value> = {
+export type Choice<Value = string> = {
     value: Value
     name?: string
     description?: string
@@ -66,8 +66,8 @@ type NormalizedChoice<Value> = {
     disabled: boolean | string
 }
 
-type SelectConfig<
-    Value,
+export type SelectConfig<
+    Value = string,
     ChoicesObject = ReadonlyArray<string | Separator> | ReadonlyArray<Choice<Value> | Separator>,
 > = {
     message: string
@@ -120,7 +120,7 @@ function normalizeChoices<Value>(
     })
 }
 
-export default createPrompt(<Value>(config: SelectConfig<Value>, done: (value: Value) => void) => {
+export default createPrompt(<Value = string>(config: SelectConfig<Value>, done: (value: Value) => void) => {
     const { loop = true, pageSize = 7, statefulBanner } = config
     const firstRender = useRef(true)
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme)
