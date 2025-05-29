@@ -49,7 +49,7 @@ const selectTheme: SelectTheme = {
     indexMode: 'hidden',
 }
 
-type Choice<Value> = {
+export type Choice<Value = string> = {
     value: Value
     name?: string
     description?: string
@@ -66,8 +66,8 @@ type NormalizedChoice<Value> = {
     disabled: boolean | string
 }
 
-type SelectConfig<
-    Value,
+export type SelectConfig<
+    Value = string,
     ChoicesObject = ReadonlyArray<string | Separator> | ReadonlyArray<Choice<Value> | Separator>,
 > = {
     message: string
