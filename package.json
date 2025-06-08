@@ -11,6 +11,7 @@
         "start": "tsx ./src/example.ts",
         "build": "tsc",
         "dev": "tsx watch ./src/example.ts",
+        "demo": "tsx ./src/demo.ts --run",
         "test": "vitest .",
         "test:once": "vitest run",
         "format": "prettier --write --list-different .",

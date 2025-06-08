@@ -36,7 +36,7 @@ const exampleStatefulBanner = (setState: (s: string) => void) => {
     return () => Object.values(timers).forEach(clearTimeout)
 }
 
-export async function example(): Promise<void> {
+export async function demo(): Promise<void> {
     const answer = await select({
         message: 'Choose an option',
         choices: [
@@ -64,4 +64,7 @@ export async function example(): Promise<void> {
     console.log(`You chose ${answer}`)
 }
 
-example()
+// If the --run flag was used, run it immediately
+if (process.argv.includes('--run')) {
+    await demo()
+}
