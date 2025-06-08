@@ -1,16 +1,14 @@
 {
     "name": "inquirer-select-with-state",
-    "version": "0.1.3",
     "description": "Inquirer select prompt with a stateful banner",
+    "version": "0.1.4",
     "main": "./dist/select.js",
     "files": [
         "dist"
     ],
     "type": "module",
     "scripts": {
-        "start": "tsx ./src/example.ts",
         "build": "tsc",
-        "dev": "tsx watch ./src/example.ts",
         "demo": "tsx ./src/demo.ts --run",
         "test": "vitest .",
         "test:once": "vitest run",
@@ -21,28 +19,6 @@
         "ci": "pnpm build && pnpm check-format && pnpm check-exports",
         "prepublishOnly": "pnpm run ci",
         "prepare": "husky"
-    },
-    "keywords": [
-        "inquirer",
-        "select",
-        "prompt",
-        "stateful",
-        "banner"
-    ],
-    "author": {
-        "name": "Craig Patik",
-        "email": "craig@patik.com",
-        "url": "https://patik.com"
-    },
-    "homepage": "https://github.com/patik/inquirer-select-with-state",
-    "license": "MIT",
-    "packageManager": "pnpm@10.10.0",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/patik/inquirer-select-with-state.git"
-    },
-    "publishConfig": {
-        "access": "public"
     },
     "dependencies": {
         "@inquirer/core": "^10.1.13",
@@ -67,5 +43,27 @@
         "typescript": "^5.8.3",
         "typescript-eslint": "^8.33.1",
         "vitest": "^3.2.2"
+    },
+    "packageManager": "pnpm@10.10.0",
+    "keywords": [
+        "inquirer",
+        "select",
+        "prompt",
+        "stateful",
+        "banner"
+    ],
+    "license": "MIT",
+    "author": {
+        "name": "Craig Patik",
+        "email": "craig@patik.com",
+        "url": "https://patik.com"
+    },
+    "homepage": "https://github.com/patik/inquirer-select-with-state",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/patik/inquirer-select-with-state.git"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }
