@@ -42,7 +42,7 @@
         "tsx": "^4.19.4",
         "typescript": "^5.8.3",
         "typescript-eslint": "^8.33.1",
-        "vitest": "^3.2.2"
+        "vitest": "^4.0.4"
     },
     "packageManager": "pnpm@10.10.0",
     "keywords": [
